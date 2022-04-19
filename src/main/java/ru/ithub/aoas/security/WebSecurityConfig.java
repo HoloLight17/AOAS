@@ -31,6 +31,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
+  private static final String[] swagger = {
+          // -- swagger ui
+          "**/swagger-resources/**",
+          "/v2/api-docs",
+          "/webjars/**",
+          "/configuration/ui",
+          "/swagger-resources/**",
+          "/configuration/security",
+          "/swagger-ui/**",
+          "/webjars/**"
+  };
+
+
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
@@ -59,6 +72,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
       .authorizeRequests().antMatchers("/api/auth/**").permitAll()
       .antMatchers("/api/test/**").permitAll()
+      .antMatchers("/v2/api-docs",
+              "/configuration/ui",
+              "/swagger-resources/**",
+              "/configuration/security",
+              "/swagger-ui/**",
+              "/swagger-ui/swagger-ui.html",
+              "/webjars/**").permitAll()
+      .antMatchers("/management/**").hasRole("ADMIN")
       .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
