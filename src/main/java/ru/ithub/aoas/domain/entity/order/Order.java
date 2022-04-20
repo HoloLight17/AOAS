@@ -1,5 +1,6 @@
 package ru.ithub.aoas.domain.entity.order;
 
+import java.util.HashMap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,5 +62,5 @@ public class Order {
   private OrderType orderType;
 
   @Convert(converter = MapLongIntegerConverter.class)
-  private Map<Long, Integer> requiredMaterials;
+  private Map<Long, Integer> requiredMaterials = new HashMap<>();
 }
