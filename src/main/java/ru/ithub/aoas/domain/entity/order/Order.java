@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.ithub.aoas.domain.converter.MapLongIntegerConverter;
 import ru.ithub.aoas.domain.entity.Client;
-import ru.ithub.aoas.domain.entity.User;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Map;
+import ru.ithub.aoas.domain.entity.User;
 
 @Getter
 @Setter
