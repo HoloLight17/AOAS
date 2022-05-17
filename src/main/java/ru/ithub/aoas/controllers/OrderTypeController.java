@@ -13,40 +13,40 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ithub.aoas.payload.response.OrderDto;
-import ru.ithub.aoas.services.OrderService;
+import ru.ithub.aoas.payload.response.OrderTypeDto;
+import ru.ithub.aoas.services.OrderTypeService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/order_types")
 @RequiredArgsConstructor
-public class OrderController {
+public class OrderTypeController {
 
   @Autowired
-  private final OrderService orderService;
+  private final OrderTypeService orderServiceType;
 
   @GetMapping
-  public List<OrderDto> getAll() {
-    return orderService.getAll();
+  public List<OrderTypeDto> getAll() {
+    return orderServiceType.getAll();
   }
 
   @GetMapping("{/id}")
-  public OrderDto getOrder(@PathVariable Long id) {
-    return orderService.getOrder(id);
+  public OrderTypeDto getOrder(@PathVariable Long id) {
+    return orderServiceType.getOrderType(id);
   }
 
   @PostMapping
-  public OrderDto create(@RequestBody OrderDto dto) {
-    return orderService.createOrder(dto);
+  public OrderTypeDto create(@RequestBody OrderTypeDto dto) {
+    return orderServiceType.createOrderType(dto);
   }
 
   @PutMapping("/{id}")
-  public OrderDto update(@PathVariable Long id, @RequestBody OrderDto dto) {
-    return orderService.updateOrder(id, dto);
+  public OrderTypeDto update(@PathVariable Long id, @RequestBody OrderTypeDto dto) {
+    return orderServiceType.updateOrderType(id, dto);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> delete(@PathVariable Long id) {
-    return orderService.delete(id);
+    return orderServiceType.delete(id);
   }
 }
