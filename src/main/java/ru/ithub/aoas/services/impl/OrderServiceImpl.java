@@ -1,19 +1,21 @@
 package ru.ithub.aoas.services.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.ithub.aoas.domain.entity.Client;
-import ru.ithub.aoas.domain.entity.User;
 import ru.ithub.aoas.domain.entity.order.Order;
 import ru.ithub.aoas.domain.entity.order.OrderStatus;
 import ru.ithub.aoas.domain.repository.ClientRepository;
 import ru.ithub.aoas.domain.repository.MaterialRepository;
 import ru.ithub.aoas.domain.repository.OrderRepository;
 import ru.ithub.aoas.domain.repository.OrderTypeRepository;
-import ru.ithub.aoas.domain.repository.UserRepository;
 import ru.ithub.aoas.exceptions.NotFoundException;
 import ru.ithub.aoas.payload.response.OrderDto;
 import ru.ithub.aoas.services.OrderService;
@@ -24,9 +26,34 @@ class OrderServiceImpl implements OrderService {
 
   private final OrderRepository orderRepository;
   private final ClientRepository clientRepository;
-  private final UserRepository userRepository;
   private final OrderTypeRepository orderTypeRepository;
   private final MaterialRepository materialRepository;
+
+  @Override
+  public List<OrderDto> getAll() {
+    return orderRepository.findAll().stream().map(this::convert).collect(Collectors.toList());
+  }
+
+  @Override
+  public OrderDto getOrder(Long id) {
+    return convert(
+        orderRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(Order.class, id))
+    );
+  }
+
+  private OrderDto convert(Order entity) {
+    return new OrderDto(
+        entity.getId(),
+        entity.getInformation(),
+        entity.getCreatedAt(),
+        entity.getDoneAt(),
+        entity.getStatus().name(),
+        entity.getClient().getId(),
+        entity.getOrderType().getId(),
+        entity.getRequiredMaterials()
+    );
+  }
 
   @Override
   public OrderDto createOrder(OrderDto dto) {
@@ -43,18 +70,10 @@ class OrderServiceImpl implements OrderService {
     return convert(orderRepository.save(order));
   }
 
-  private OrderDto convert(Order entity) {
-    return new OrderDto(
-        entity.getId(),
-        entity.getInformation(),
-        entity.getCreatedAt(),
-        entity.getDoneAt(),
-        entity.getStatus().name(),
-        entity.getClient().getId(),
-        entity.getPerformer().getId(),
-        entity.getOrderType().getId(),
-        entity.getRequiredMaterials()
-    );
+  @Override
+  public ResponseEntity<Object> delete(Long id) {
+    orderRepository.delete(orderRepository.getById(id));
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   private void updateOrder(Order order, OrderDto dto) {
@@ -75,13 +94,6 @@ class OrderServiceImpl implements OrderService {
           clientRepository.findById(
                   dto.getClientId())
               .orElseThrow(() -> new NotFoundException(Client.class, dto.getClientId()))
-      );
-    }
-
-    if (dto.getPerformerId() != null) {
-      order.setPerformer(
-          userRepository.findById(dto.getPerformerId())
-              .orElseThrow(() -> new NotFoundException(User.class, dto.getClientId()))
       );
     }
 

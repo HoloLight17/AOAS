@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ithub.aoas.domain.entity.ERole;
-import ru.ithub.aoas.domain.entity.Role;
-import ru.ithub.aoas.domain.entity.User;
+import ru.ithub.aoas.domain.entity.user.ERole;
+import ru.ithub.aoas.domain.entity.user.Role;
+import ru.ithub.aoas.domain.entity.user.User;
 import ru.ithub.aoas.domain.repository.RoleRepository;
 import ru.ithub.aoas.domain.repository.UserRepository;
 import ru.ithub.aoas.payload.request.LoginRequest;
@@ -30,26 +30,21 @@ import ru.ithub.aoas.payload.response.MessageResponse;
 import ru.ithub.aoas.security.jwt.JwtUtils;
 import ru.ithub.aoas.security.services.UserDetailsImpl;
 
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
   @Autowired
-  AuthenticationManager authenticationManager;
-
+  private JwtUtils jwtUtils;
+  @Autowired
+  private AuthenticationManager authenticationManager;
   @Autowired
   private UserRepository userRepository;
-
   @Autowired
   private RoleRepository roleRepository;
-
   @Autowired
   private PasswordEncoder encoder;
-
-  @Autowired
-  private JwtUtils jwtUtils;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

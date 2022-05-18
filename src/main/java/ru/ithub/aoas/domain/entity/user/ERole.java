@@ -1,4 +1,4 @@
-package ru.ithub.aoas.domain.entity;
+package ru.ithub.aoas.domain.entity.user;
 
 public enum ERole {
   ROLE_USER,

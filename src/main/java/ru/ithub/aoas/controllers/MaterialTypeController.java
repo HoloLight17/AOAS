@@ -3,6 +3,7 @@ package ru.ithub.aoas.controllers;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,40 +14,40 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ithub.aoas.payload.response.OrderDto;
-import ru.ithub.aoas.services.OrderService;
+import ru.ithub.aoas.payload.response.MaterialTypeDto;
+import ru.ithub.aoas.services.MaterialTypeService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/material_types")
 @RequiredArgsConstructor
-public class OrderController {
+public class MaterialTypeController {
 
   @Autowired
-  private final OrderService orderService;
+  private final MaterialTypeService materialTypeService;
 
   @GetMapping
-  public List<OrderDto> getAll() {
-    return orderService.getAll();
+  public ResponseEntity<List<MaterialTypeDto>> getAll() {
+    return new ResponseEntity<>(materialTypeService.getAll(), HttpStatus.OK);
   }
 
   @GetMapping("{/id}")
-  public OrderDto getOrder(@PathVariable Long id) {
-    return orderService.getOrder(id);
+  public ResponseEntity<MaterialTypeDto> getProducer(@PathVariable Long id) {
+    return new ResponseEntity<>(materialTypeService.getMaterialType(id), HttpStatus.OK);
   }
 
   @PostMapping
-  public OrderDto create(@RequestBody OrderDto dto) {
-    return orderService.createOrder(dto);
+  public MaterialTypeDto create(@RequestBody MaterialTypeDto dto) {
+    return materialTypeService.createMaterialType(dto);
   }
 
   @PutMapping("/{id}")
-  public OrderDto update(@PathVariable Long id, @RequestBody OrderDto dto) {
-    return orderService.updateOrder(id, dto);
+  public MaterialTypeDto update(@PathVariable Long id, @RequestBody MaterialTypeDto dto) {
+    return materialTypeService.updateMaterialType(id, dto);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> delete(@PathVariable Long id) {
-    return orderService.delete(id);
+    return materialTypeService.delete(id);
   }
 }

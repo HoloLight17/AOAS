@@ -3,7 +3,7 @@ package ru.ithub.aoas.domain.repository;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.ithub.aoas.domain.entity.User;
+import ru.ithub.aoas.domain.entity.user.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
