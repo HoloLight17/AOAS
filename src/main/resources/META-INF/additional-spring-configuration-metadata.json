@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "aoas.app.jwtToken",
+      "type": "java.lang.String",
+      "description": "Description for aoas.app.jwtToken."
+    },
+    {
+      "name": "aoas.app.jwtTokenExpirationMs",
+      "type": "java.lang.String",
+      "description": "Description for aoas.app.jwtTokenExpirationMs."
+    }
+  ]
+}
