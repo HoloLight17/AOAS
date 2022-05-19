@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import ru.ithub.aoas.security.jwt.AuthEntryPointJwt;
 import ru.ithub.aoas.security.jwt.AuthTokenFilter;
 import ru.ithub.aoas.security.services.UserDetailsServiceImpl;
@@ -25,9 +26,19 @@ import ru.ithub.aoas.security.services.UserDetailsServiceImpl;
     prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+  private static final String[] swagger = {
+      // -- swagger ui
+      "**/swagger-resources/**",
+      "/v2/api-docs",
+      "/webjars/**",
+      "/configuration/ui",
+      "/swagger-resources/**",
+      "/configuration/security",
+      "/swagger-ui/**",
+      "/webjars/**"
+  };
   @Autowired
   private UserDetailsServiceImpl userDetailsService;
-
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
@@ -58,13 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-        .antMatchers("/api/test/**",
-            "/v2/api-docs",
-            "/configuration/ui",
-            "/swagger-resources/**",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**").permitAll()
+        .antMatchers("/api/test/**").permitAll()
+        .antMatchers(swagger).permitAll()
+        .antMatchers("/api/**").hasRole("ADMIN")
         .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
